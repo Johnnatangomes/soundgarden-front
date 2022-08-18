@@ -1,43 +1,27 @@
-const SOUND = 'https://xp41-soundgarden-api.herokuapp.com/events';
+const listarEventos = async() => {
+    const resposta = await fetch('https://xp41-soundgarden-api.herokuapp.com/events')
+    if( resposta.status === 200){ 
+        const data = await resposta.json();
+        return data
+    }
+}
 
-const listarEventos = async () =>{
-    const resposta = await fetch(SOUND, {
-        method: "GET",
-        mode: "cors",
-        headers: { "Content-Type": "application/json" }
-    }).then((resposta) =>{
-        return resposta.json();
-    });
-
-    const tbody = document.querySelector('.lista-Eventos tbody');
-
-    let htmleventos = "";
-
-    eventos.forEach(evento => { htmleventos += `
-        <tr><th scope="row">#</th>
+const rendEventos = async(eventos) => { 
+    const data =  await listarEventos(eventos)
+    data.forEach((evento,index) => { 
+    const tbody = document.querySelector("tbody")
+    const tr = document.createElement("tr")
+    tr.innerHTML = `<th scope="row">${index +1} </th>
         <td>${evento.scheduled}</td>
         <td>${evento.name}</td>
         <td>${evento.attractions.join(', ')}</td>
         <td>
           <a href="reservas.html?id=${evento._id}" class="btn btn-dark">ver reservas</a>
-          <a href="editar-evento.html?id=${evento._id}" class="btn btn-secondary">editar</a>
-          <a href="excluir-evento.html?id=${evento._id}" class="btn btn-danger">excluir</a>
+          <a href="editar-evento.html?id=${evento._id}&nome=${evento.name}&descricao=${evento.description}&data=${evento.scheduled}&ingressos=${evento.number_tickets}&atracoes=${evento.attractions}"" class="btn btn-secondary">editar</a>
+          <a href="excluir-evento.html?id=${evento._id}&nome=${evento.name}&descricao=${evento.description}&data=${evento.scheduled}&ingressos=${evento.number_tickets}&atracoes=${evento.attractions}" class="btn btn-danger">Excluir</a>
         </td>
-        </tr>
-        `;
-});
-        
-
-
-listarEventos()
-
-document.onload = () => {
-
-    const url = new URL (window.location.href);
-
-    const acao = url.searchParams.get('acao');
-
-    if (acao != null && acao == 'edit'){
-        alert('Evento atualizado com sucesso!');
-    }
+    `
+     tbody.appendChild(tr)   
+    });
 }
+rendEventos()
