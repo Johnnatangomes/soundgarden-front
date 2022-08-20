@@ -5,13 +5,13 @@ const listarEventos = async() => {
         return data
     }
 }
-
-const rendEventos = async(eventos) => { 
+    const rendEventos = async(eventos) => { 
     const data =  await listarEventos(eventos)
     data.forEach((evento,index) => { 
     const tbody = document.querySelector("tbody")
     const tr = document.createElement("tr")
-    tr.innerHTML = `<th scope="row">${index +1} </th>
+    tr.innerHTML = 
+        `<th scope="row">${index +1} </th>
         <td>${evento.scheduled}</td>
         <td>${evento.name}</td>
         <td>${evento.attractions.join(', ')}</td>
@@ -20,7 +20,7 @@ const rendEventos = async(eventos) => {
           <a href="editar-evento.html?id=${evento._id}&nome=${evento.name}&descricao=${evento.description}&data=${evento.scheduled}&ingressos=${evento.number_tickets}&atracoes=${evento.attractions}"" class="btn btn-secondary">editar</a>
           <a href="excluir-evento.html?id=${evento._id}&nome=${evento.name}&descricao=${evento.description}&data=${evento.scheduled}&ingressos=${evento.number_tickets}&atracoes=${evento.attractions}" class="btn btn-danger">Excluir</a>
         </td>
-    `
+        `
      tbody.appendChild(tr)   
     });
 }
